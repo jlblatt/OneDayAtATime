@@ -11,11 +11,10 @@ function drawChart(csv)
 		var sd = Date.parse(csv[0].split(',')[0]);
 		var ed = Date.parse(csv[csv.length - 1].split(',')[0]);
 		
-		var d_daily   = {}, 
-    d_weekly  = {}, 
-    d_monthly = {};
+		var d_daily = {}, d_weekly = {}, d_monthly = {};
 		
-		for(var d = sd; d < ed; d+=86400000)
+		//populate daily
+		for(var d = sd; d < ed; d += 86400000)
 		{
 				if(!(d in d_daily)) d_daily[d] = 0;
 				
@@ -30,10 +29,14 @@ function drawChart(csv)
 						else break;
 				}
 		}
-		
+
+		//populate weekly
+
+		//populate monthly
+
+		//chart daily
 		var data = { labels: [], datasets: [] };
 
-		//daily
 		for(var i in d_daily) data.labels.push('');
 		data.datasets.push({
 				label: "Daily",
@@ -49,6 +52,10 @@ function drawChart(csv)
 
 		var ctx = document.getElementById("chart").getContext("2d");
 		var chart = new Chart(ctx).Line(data);
+
+		//chart weekly
+
+		//chart monthly
 		
 }
 
