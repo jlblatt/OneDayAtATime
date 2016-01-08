@@ -13,7 +13,9 @@
 
   <body>
 
-    <canvas id="chart"></canvas>
+    <canvas class="chart" id="chart-daily"></canvas>
+    <canvas class="chart" id="chart-weekly"></canvas>
+    <canvas class="chart" id="chart-monthly"></canvas>
 
   </body>
 
