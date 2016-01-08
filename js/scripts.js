@@ -5,6 +5,7 @@ function drawChart(csv)
 		
 		//parse the csv
 		var csv = csv.split("\n");
+
 		for(var i = 0; i < csv.length; i++)
 		{
 				if(!csv[i].match(/^\d{1,2}\/\d{1,2}\/\d{4}\,[0-9\.]+$/))
@@ -14,33 +15,44 @@ function drawChart(csv)
 				}
 		}
 
-		//populate daily
-		var d_daily = [];
+		if(csv.length < 2) return;
+
 		for(var i = 0; i < csv.length; i++)
 		{
 				var entry = csv[i].split(',');
 				
 				var thisDate = Date.parse(entry[0]);
-				var thisCount = parseInt(entry[1]);
+				var thisVal = parseInt(entry[1]);
 
-				if(d_daily.length > 0)
+				csv[i] = { x: thisDate, y: thisVal };
+		}
+
+		csv.sort(function(a, b)
+		{
+				return a.x > b.x;
+		});
+
+		//populate daily
+		var dd = [];
+		var sd = csv[0].x;
+		var ed = csv[csv.length - 1].x;
+
+		for(var d = sd; d < ed; d+=86400000)
+		{
+				var thisVal = 0;
+
+				while(d >= csv[0].x)
 				{
-						var lastIndex = d_daily.length - 1;
-						var currDate = d_daily[lastIndex][0];
-						var currentAggregate = d_daily[lastIndex][1];
-
-						if(thisDate == currDate) d_daily[lastIndex][1] += thisCount;
-						else d_daily.push([thisDate, thisCount]);
-
+						thisVal += csv[0].y;
+						csv.shift();
 				}
 
-				else d_daily.push([thisDate, thisCount]);
-
+				dd.push({ x: d, y: thisVal });
 		}
 		
 		//populate weekly
-		var d_weekly = [];
-		for(var i = 0; i < d_daily.length; i++)
+		var dw = [];
+		for(var i = 0; i < dd.length; i++)
 		{
 				if(i % 7 == 0 && i > 0)
 				{
@@ -48,16 +60,16 @@ function drawChart(csv)
 
 						for(var j = 0; j < 7; j++)
 						{
-								agg += d_daily[i - j][1];
+								agg += dd[i - j].y;
 						}
 
-						d_weekly.push([d_daily[i][0], agg / 7]);
+						dw.push({ x: dd[i].x, y: agg / 7 });
 				}
 		}
 
 		//populate monthly
-		var d_monthly = [];
-		for(var i = 0; i < d_daily.length; i++)
+		var dm = [];
+		for(var i = 0; i < dd.length; i++)
 		{
 				if(i % 30 == 0 && i > 0)
 				{
@@ -65,72 +77,21 @@ function drawChart(csv)
 
 						for(var j = 0; j < 30; j++)
 						{
-								agg += d_daily[i - j][1];
+								agg += dd[i - j].y;
 						}
 
-						d_monthly.push([d_daily[i][0], agg / 30]);
+						dm.push({ x: dd[i].x, y: agg / 30 });
 				}
 		}
 
-		//chart daily
-		var daily_options = { bezierCurve : false };
-		var daily_data = { labels: [], datasets: [] };
-
-		for(var i = 0; i < d_daily.length; i++) daily_data.labels.push('');
-		daily_data.datasets.push({
-				label: "Daily",
-				fillColor: "rgba(220,220,220,0.2)",
-				strokeColor: "rgba(220,220,220,1)",
-				pointColor: "rgba(220,220,220,1)",
-				pointStrokeColor: "#fff",
-				pointHighlightFill: "#fff",
-				pointHighlightStroke: "rgba(220,220,220,1)",
-				data: []
+		var chart = new Chartist.Line('.ct-chart', {
+				series: [dd, dw, dm]
+		}, {
+				axisX: {
+						type: Chartist.AutoScaleAxis,
+						onlyInteger: true
+				}
 		});
-		for(var i = 0; i < d_daily.length; i++) daily_data.datasets[0].data.push(d_daily[i][1]);
-
-		var ctx_daily = document.getElementById("chart-daily").getContext("2d");
-		var chart_daily = new Chart(ctx_daily).Line(daily_data, daily_options);
-
-		//chart weekly
-		var weekly_options = { bezierCurve : false };
-		var weekly_data = { labels: [], datasets: [] };
-
-		for(var i = 0; i < d_weekly.length; i++) weekly_data.labels.push('');
-		weekly_data.datasets.push({
-				label: "Weekly",
-				fillColor: "rgba(220,220,220,0.2)",
-				strokeColor: "rgba(220,220,220,1)",
-				pointColor: "rgba(220,220,220,1)",
-				pointStrokeColor: "#fff",
-				pointHighlightFill: "#fff",
-				pointHighlightStroke: "rgba(220,220,220,1)",
-				data: []
-		});
-		for(var i = 0; i < d_weekly.length; i++) weekly_data.datasets[0].data.push(d_weekly[i][1]);
-
-		var ctx_weekly = document.getElementById("chart-weekly").getContext("2d");
-		var chart_weekly = new Chart(ctx_weekly).Line(weekly_data, weekly_options);
-
-		//chart monthly
-		var monthly_options = { bezierCurve : false };
-		var monthly_data = { labels: [], datasets: [] };
-
-		for(var i = 0; i < d_monthly.length; i++) monthly_data.labels.push('');
-		monthly_data.datasets.push({
-				label: "Monthly",
-				fillColor: "rgba(220,220,220,0.2)",
-				strokeColor: "rgba(220,220,220,1)",
-				pointColor: "rgba(220,220,220,1)",
-				pointStrokeColor: "#fff",
-				pointHighlightFill: "#fff",
-				pointHighlightStroke: "rgba(220,220,220,1)",
-				data: []
-		});
-		for(var i = 0; i < d_monthly.length; i++) monthly_data.datasets[0].data.push(d_monthly[i][1]);
-
-		var ctx_monthly = document.getElementById("chart-monthly").getContext("2d");
-		var chart_monthly = new Chart(ctx_monthly).Line(monthly_data, monthly_options);
 		
 }
 

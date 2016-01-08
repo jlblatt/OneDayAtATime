@@ -5,17 +5,18 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>OneDayAtATime</title>
+    <link rel="stylesheet" href="//cdn.jsdelivr.net/chartist.js/latest/chartist.min.css">
     <link href="css/styles.css" rel="stylesheet">
     <script src="//code.jquery.com/jquery-2.1.4.min.js"></script>
-    <script src="//cdnjs.cloudflare.com/ajax/libs/Chart.js/1.0.2/Chart.min.js"></script>
+    <script src="//cdn.jsdelivr.net/chartist.js/latest/chartist.min.js"></script>
     <script src="js/scripts.js"></script>
   </head>
 
   <body>
 
-    <canvas class="chart" id="chart-daily"></canvas>
-    <canvas class="chart" id="chart-weekly"></canvas>
-    <canvas class="chart" id="chart-monthly"></canvas>
+    <div class="ct-chart-wrap">
+      <div class="ct-chart ct-octave"></div>
+    </div>
 
   </body>
 
