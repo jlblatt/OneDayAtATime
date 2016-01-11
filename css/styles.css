@@ -1,8 +1,33 @@
 a,abbr,acronym,address,applet,article,aside,audio,b,big,blockquote,body,canvas,caption,center,cite,code,dd,del,details,dfn,div,dl,dt,em,embed,fieldset,figcaption,figure,footer,form,h1,h2,h3,h4,h5,h6,header,hgroup,html,i,iframe,img,ins,kbd,label,legend,li,mark,menu,nav,object,ol,output,p,pre,q,ruby,s,samp,section,small,span,strike,strong,sub,summary,sup,table,tbody,td,tfoot,th,thead,time,tr,tt,u,ul,var,video{margin:0;padding:0;border:0;font:inherit;vertical-align:baseline}article,aside,details,figcaption,figure,footer,header,hgroup,menu,nav,section{display:block}body{line-height:1}ol,ul{list-style:none}blockquote,q{quotes:none}blockquote:after,blockquote:before,q:after,q:before{content:'';content:none}table{border-collapse:collapse;border-spacing:0}
 
 .ct-chart-wrap {
-  position: absolute;
-  top: 60px;
-	left: 80px;
-  right: 100px;
+		position: absolute;
+		top: 3%;
+		left: 5%;
+		right: 6%;
 }
+
+.ct-series-a .ct-line {
+
+}
+
+.ct-series-a .ct-point {
+  stroke: rgba(0, 119, 155, .3);
+}
+
+.ct-series-b .ct-line {
+  stroke: rgba(0, 119, 155, .7);
+}
+
+.ct-series-b .ct-point {
+  stroke: rgba(0, 119, 155, .7);
+}
+
+.ct-series-c .ct-line {
+  stroke: rgba(0, 119, 155, 1);
+}
+
+.ct-series-c .ct-point {
+  stroke: rgba(0, 119, 155, 1);
+}
+

@@ -33,7 +33,7 @@ function drawChart(csv)
 		});
 
 		//populate daily
-		var dd = [];
+		var dd = { name: 'daily', data: [] };
 		var sd = csv[0].x;
 		var ed = csv[csv.length - 1].x;
 
@@ -47,12 +47,12 @@ function drawChart(csv)
 						csv.shift();
 				}
 
-				dd.push({ x: d, y: thisVal });
+				dd.data.push({ x: d, y: thisVal });
 		}
 		
 		//populate weekly
-		var dw = [];
-		for(var i = 0; i < dd.length; i++)
+		var dw = { name: 'weekly', data: [] };
+		for(var i = 0; i < dd.data.length; i++)
 		{
 				if(i % 7 == 0 && i > 0)
 				{
@@ -60,16 +60,16 @@ function drawChart(csv)
 
 						for(var j = 0; j < 7; j++)
 						{
-								agg += dd[i - j].y;
+								agg += dd.data[i - j].y;
 						}
 
-						dw.push({ x: dd[i].x, y: agg / 7 });
+						dw.data.push({ x: dd.data[i].x, y: agg / 7 });
 				}
 		}
 
 		//populate monthly
-		var dm = [];
-		for(var i = 0; i < dd.length; i++)
+		var dm = { name: 'monthly', data: [] };
+		for(var i = 0; i < dd.data.length; i++)
 		{
 				if(i % 30 == 0 && i > 0)
 				{
@@ -77,10 +77,10 @@ function drawChart(csv)
 
 						for(var j = 0; j < 30; j++)
 						{
-								agg += dd[i - j].y;
+								agg += dd.data[i - j].y;
 						}
 
-						dm.push({ x: dd[i].x, y: agg / 30 });
+						dm.data.push({ x: dd.data[i].x, y: agg / 30 });
 				}
 		}
 
@@ -89,7 +89,18 @@ function drawChart(csv)
 		}, {
 				axisX: {
 						type: Chartist.AutoScaleAxis,
-						onlyInteger: true
+						showLabel: false
+				},
+				series: {
+						'daily': {
+								showLine: false
+						},
+						'weekly': {
+
+						},
+						'monthly': {
+
+						}
 				}
 		});
 		
