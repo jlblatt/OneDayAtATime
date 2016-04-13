@@ -4,11 +4,11 @@ function drawChart(csv)
 {
 		
 		//parse the csv
-		var csv = csv.split("\n");
+		var csv = csv.split(/\r?\n/);
 
 		for(var i = 0; i < csv.length; i++)
 		{
-				if(!csv[i].match(/^\d{1,2}\/\d{1,2}\/\d{4}\,[0-9\.]+$/))
+				if(!csv[i].match(/^\d{1,2}\/\d{1,2}\/\d{4}/))
 				{
 						csv.splice(i, 1);
 						i--;
@@ -22,7 +22,7 @@ function drawChart(csv)
 				var entry = csv[i].split(',');
 				
 				var thisDate = Date.parse(entry[0]);
-				var thisVal = parseInt(entry[1]);
+				var thisVal = parseFloat(entry[1]);
 
 				csv[i] = { x: thisDate, y: thisVal };
 		}
@@ -43,13 +43,13 @@ function drawChart(csv)
 
 				while(d >= csv[0].x)
 				{
-						thisVal += csv[0].y;
+						thisVal += parseFloat(csv[0].y);
 						csv.shift();
 				}
 
 				dd.data.push({ x: d, y: thisVal });
 		}
-		
+
 		//populate weekly
 		var dw = { name: 'weekly', data: [] };
 		for(var i = 0; i < dd.data.length; i++)
@@ -112,5 +112,6 @@ function drawChart(csv)
 $(document).ready(function(){
 		
 		$.get('data/generateRandomCSVData.php', drawChart);
+		//$.get('data/data.csv', drawChart);
 		
 });
